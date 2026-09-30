@@ -15,6 +15,26 @@ void clear_input_buffer() {
   }
 }
 
+
+int user_id_exists(int id) {
+
+  FILE *file = fopen("users.txt", "r");
+  if (file == NULL) {
+    return 0;
+  }
+
+  struct User user;
+  while (fscanf(file, "%d,%49[^,],%d", &user.id, user.name, &user.age) == 3) {
+    if (user.id == id) {
+      fclose(file);
+      return 1;
+    }
+  }
+
+  fclose(file);
+  return 0;
+}
+
 void add_user() {
 
   FILE *file = fopen("users.txt", "a");
@@ -27,6 +47,12 @@ void add_user() {
   printf("Enter ID: ");
   scanf("%d", &user.id);
   clear_input_buffer();
+
+  if (user_id_exists(user.id)) {
+    printf("Error: ID already exists\n");
+    fclose(file);
+    return;
+  }
 
   printf("Enter name: ");
   fgets(user.name, sizeof(user.name), stdin);
@@ -137,6 +163,7 @@ void update_user() {
   if (remove("users.txt") != 0){
 
     printf("Error removing users.txt\n");
+    remove("temp.txt");
     return;
 
   }
@@ -144,6 +171,8 @@ void update_user() {
   if (rename("temp.txt", "users.txt") !=0 ){
 
     printf("Error renaming file\n");
+    remove("temp.txt");
+    return;
 
   }
   
@@ -217,4 +246,50 @@ void delete_user() {
 
   }
 
+}
+
+int main() {
+
+    int choice;
+    do {
+        printf("\nMenus:\n");
+        printf("1. Add User\n");
+        printf("2. Read Users\n");
+        printf("3. Update User\n");
+        printf("4. Delete User\n");
+        printf("5. Exit\n");
+        printf("Enter choice: ");
+
+        scanf("%d", &choice);
+        clear_input_buffer();
+
+        switch (choice) {
+
+            case 1:
+                add_user();
+                break;
+
+            case 2:
+                read_users();
+                break;
+
+            case 3:
+                update_user();
+                break;
+
+            case 4:
+                delete_user();
+                break;
+
+            case 5:
+                printf("Exiting\n");
+                break;
+
+            default:
+                printf("Invalid choice.\n");
+                break;
+        }
+    }  while (choice != 5);
+
+    return 0;
 }

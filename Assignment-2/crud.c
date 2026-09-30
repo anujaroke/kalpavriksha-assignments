@@ -20,7 +20,7 @@ void add_user() {
   FILE *file = fopen("users.txt", "a");
   if (file == NULL) {
     printf("Error: File hasn't been opened properly\n");
-    return 0;
+    return;
   }
   struct User user;
 
@@ -36,7 +36,26 @@ void add_user() {
   scanf("%d", &user.age);
   clear_input_buffer();
 
-  fprintf(file, "%d, %s, %d", user.id, user.name, user.age);
+  fprintf(file, "%d,%s,%d\n", user.id, user.name, user.age);
   fclose(file);
   
+}
+
+
+void read_users() {
+
+  FILE *file = fopen("users.txt", "r");
+  if (file == NULL) {
+    printf("Error: File hasn't been opened properly\n");
+    return;
+  }
+  struct User user;
+
+  while (fscanf(file, "%d,%49[^,],%d", &user.id, user.name, &user.age == 3)) {
+
+    printf("ID: %d, Name: %s, Age: %d", user.id, user.name, user.age);
+    
+  }
+
+  fclose(file);
 }

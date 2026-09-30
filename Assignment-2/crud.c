@@ -148,3 +148,73 @@ void update_user() {
   }
   
 }
+
+
+void delete_user() {
+
+    int delete_id;
+
+    printf("Enter ID to delete: ");
+    scanf("%d", &delete_id);
+    clear_input_buffer();
+
+    FILE *file = fopen("users.txt", "r");
+
+    if (file == NULL) {
+        printf("Error: File hasn't been opened properly\n");
+        return;
+    }
+
+    FILE *temp_file = fopen("temp.txt", "w");
+
+    if (temp_file == NULL) {
+        printf("Error: Temp file hasn't been opened properly\n");
+        fclose(file);
+        return;
+    }
+
+    struct User user;
+    int found = 0;
+    while (fscanf(file, "%d,%49[^,],%d", &user.id, user.name, &user.age) == 3) {
+    
+      if (user.id != delete_id){
+
+        fprintf(temp_file, "%d,%s,%d\n", user.id, user.name, user.age);
+
+      }
+
+      else {
+
+        found = 1;
+
+      }
+    
+    }
+
+    if (!found) {
+
+      printf("User not found!\n");
+      fclose(file);
+      fclose(temp_file);
+      remove("temp.txt");
+      return;
+
+    }
+    
+    fclose(file);
+    fclose(temp_file);
+
+    if (remove("users.txt") != 0){
+
+    printf("Error removing users.txt\n");
+    return;
+
+  }
+  
+  if (rename("temp.txt", "users.txt") !=0 ){
+
+    printf("Error renaming file\n");
+
+  }
+
+}

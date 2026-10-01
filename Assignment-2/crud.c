@@ -9,8 +9,8 @@ struct User {
 
 
 void clear_input_buffer() {
-  int ch;
-  while ((ch =  getchar()) != '\n' && ch != EOF){
+  int character;
+  while ((character =  getchar()) != '\n' && character != EOF){
 
   }
 }

@@ -8,81 +8,81 @@ int main()
   fgets(expression, sizeof(expression), stdin);
   
   int result = 0;
-  int last_num = 0;
-  int current_num = 0;
-  char prev_operator = '+';
-  int i = 0;
+  int last_number = 0;
+  int current_number = 0;
+  char previous_operator = '+';
+  int position = 0;
 
-  while (expression[i] != '\0') {
+  while (expression[position] != '\0') {
 
-    if (!isdigit(expression[i])) {
+    if (!isdigit(expression[position])) {
 
       printf("Error: Invalid expression\n");
       return 0;
 
     }
 
-    current_num = 0;
+    current_number = 0;
 
-    while (isdigit(expression[i])) {
+    while (isdigit(expression[position])) {
 
-        current_num = current_num * 10 + (expression[i] - '0');
-        i++;
+        current_number = current_number * 10 + (expression[position] - '0');
+        position++;
         
     }
 
-    while (isspace(expression[i])) {
+    while (isspace(expression[position])) {
 
-      i++;
+      position++;
 
     }
 
-    if(expression[i] != '+' && expression[i] != '-' && expression[i] != '*' && expression[i] != '/' && expression[i] != '\0') {
+    if(expression[position] != '+' && expression[position] != '-' && expression[position] != '*' && expression[position] != '/' && expression[position] != '\0') {
       
       printf("Error: Invalid expression\n");
       return 0;
 
     }
 
-    if (expression[i] == '+' || expression[i] == '-' ||
-    expression[i] == '*' || expression[i] == '/') {
+    if (expression[position] == '+' || expression[position] == '-' ||
+    expression[position] == '*' || expression[position] == '/') {
       
-      if (prev_operator == '+') {
-        result = result + last_num;
-        last_num = current_num;
+      if (previous_operator == '+') {
+        result = result + last_number;
+        last_number = current_number;
       }
 
-      else if (prev_operator == '-') {
-        result = result + last_num;
-        last_num = -current_num;
+      else if (previous_operator == '-') {
+        result = result + last_number;
+        last_number = -current_number;
       }
 
-      else if (prev_operator == '*') {
-        last_num = last_num * current_num;
+      else if (previous_operator == '*') {
+        last_number = last_number * current_number;
       }
 
-      else if (prev_operator == '/') {
+      else if (previous_operator == '/') {
 
-        if (current_num == 0) {
+        if (current_number == 0) {
           printf("Error: Division by zero\n");
           return 0;
         }
 
         else {
-          last_num = last_num / current_num;
+          last_number = last_number / current_number;
         }
       
       }
     
-      prev_operator = expression[i];
-      current_num = 0;
-      i++;
+      previous_operator = expression[position];
+      current_number = 0;
+      position++;
 
-      while (isspace(expression[i])) {
-        i++;
+      while (isspace(expression[position])) {
+        position++;
       }
 
-      if (expression[i] == '\0') {
+      if (expression[position] == '\0') {
         printf("Error: Invalid expression\n");
         return 0;
       }
@@ -91,35 +91,35 @@ int main()
 
   }
 
-  if (prev_operator == '+') {
-    result = result + last_num;
-    last_num = current_num;
+  if (previous_operator == '+') {
+    result = result + last_number;
+    last_number = current_number;
   }
 
-  else if (prev_operator == '-') {
-    result = result + last_num;
-    last_num = -current_num;
+  else if (previous_operator == '-') {
+    result = result + last_number;
+    last_number = -current_number;
   }
 
 
-  else if (prev_operator == '*') {
-    last_num = last_num * current_num;
+  else if (previous_operator == '*') {
+    last_number = last_number * current_number;
   }
   
-  else if (prev_operator == '/') {
+  else if (previous_operator == '/') {
 
-    if (current_num == 0) {
+    if (current_number == 0) {
       printf("Error: Division by zero\n");
       return 0;
     }
 
     else {
-      last_num = last_num / current_num;
+      last_number = last_number / current_number;
     }
 
   }
   
-  result = result + last_num;
+  result = result + last_number;
   printf("Answer: %d", result);
 
 }

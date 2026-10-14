@@ -20,8 +20,8 @@ int is_valid_name(const char name[]) {
         return 0;
     }
 
-    for (int i = 0; name[i] != '\0'; i++) {
-        if (!isalpha((unsigned char)name[i])) {
+    for (int index = 0; name[index] != '\0'; index++) {
+        if (!isalpha(name[index])) {
             return 0;
         }
     }

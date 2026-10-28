@@ -79,6 +79,84 @@ void rotate_matrix(int ***matrix, int size){
 }
 
 
+void smooth_matrix(int ***matrix, int size){
+
+  int *previous = malloc(size * sizeof(int));
+  int *current = malloc(size * sizeof(int));
+  int *next = malloc(size * sizeof(int));
+  int *output   = malloc(size * sizeof(int));
+
+  if (previous == NULL || current == NULL || next == NULL || output == NULL){
+    free(previous);
+    free(current);
+    free(next);
+    free(output);
+    printf("Memory allocation failed.\n");
+    return;
+  }
+
+
+  for (int column = 0; column < size; column++){
+    *(current + column) = *(*(*(matrix + 0) + column));
+    *(next + column) = *(*(*(matrix + 1) + column));
+  }
+  
+  for (int row = 0; row < size; row++){
+    for (int column = 0; column < size; column++){
+
+      int sum = 0;
+      int count = 0;
+
+      for (int index1 = row - 1; index1 <= row + 1; index1++){
+        for (int index2 = column - 1; index2 <= column + 1; index2++){
+
+          if (index1 >= 0 && index1 < size && index2 >= 0 && index2 < size){
+           
+            int value;
+
+            if (index1 == row - 1){
+              value = *(previous + index2);
+            }
+            else if (index1 == row){
+              value = *(current + index2);
+            }
+            else{
+              value = *(next + index2);
+            }
+
+            sum += value;
+            count++;
+
+          }
+        }
+      }
+
+      *(output + column) = sum / count;
+    }
+
+    for (int column = 0; column < size; column++){
+      *(*(*(matrix + row) + column)) = *(output + column);
+    }
+
+    int *temp = previous;
+    previous = current;
+    current = next;
+    next = temp;
+
+    if (row + 2 < size){
+      for (int column = 0; column < size; column++){
+        *(next + column) = *(*(*(matrix + row + 2) + column));
+      }
+    }
+  }
+
+  free(previous);
+  free(current);
+  free(next);
+  free(output);
+}
+
+
 int main(){
 
   int size;
@@ -109,6 +187,10 @@ int main(){
 
   rotate_matrix(matrix, size);
   printf("\nMatrix after 90 Degree Clockwise Rotation:\n");
+  display_matrix(matrix, size);
+
+  smooth_matrix(matrix, size);
+  printf("\nMatrix after Applying 3x3 Smoothing Filter:\n");
   display_matrix(matrix, size);
 
 

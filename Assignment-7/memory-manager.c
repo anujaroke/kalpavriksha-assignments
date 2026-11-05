@@ -152,34 +152,6 @@ int find_suitable_block(int size) {
 
 }
 
-void display_fragmentation(int requested_size) {
-
-  int index;
-  int total_free = 0;
-
-  for (index = 0; index < block_count; index++) {
-    if (!blocks[index].is_allocated) {
-      total_free += blocks[index].size;
-    }
-  }
-
-  if (total_free < requested_size) {
-    printf("Insufficient free memory.\n");
-    return;
-  }
-
-  printf("External fragmentation: %d bytes are free in total, but only as separate blocks of:", total_free);
-
-  for (index = 0; index < block_count; index++) {
-    if (!blocks[index].is_allocated) {
-      printf(" %d", blocks[index].size);
-    }
-  }
-
-  printf("\n");
-
-}
-
 int read_allocation_index() {
 
   int allocation_id;
@@ -225,7 +197,6 @@ void allocate_memory() {
 
   if (index == -1) {
     printf("Allocation failed: no contiguous free block is large enough.\n");
-    display_fragmentation(requested_size);
     return;
   }
 
@@ -323,7 +294,6 @@ void resize_allocation() {
 
   if (new_index == -1) {
     printf("Resize failed: no contiguous free block is large enough.\n");
-    display_fragmentation(new_size);
     return;
   }
 
